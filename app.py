@@ -23,7 +23,8 @@ def exps():
 @app.route('/func', methods=['GET', 'POST'])
 def func():
     if request.method == 'POST':
-        data = request.form['content']
+        data = '\n'.join([x for x in request.form['content'].split(
+            '\n') if 'print(' not in x])
         report = func_time_comp_cal(data)
         return render_template('views/func.html', report=report, data=data)
     return render_template('views/func.html', report=True)
