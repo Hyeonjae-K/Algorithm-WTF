@@ -11,14 +11,18 @@
     <p class="mb-0"><strong>math</strong> 라이브러리 사용 가능합니다.</p>
     <p class="mb-0"><strong>random</strong> 라이브러리 사용 가능합니다.</p>
     <div class="alert alert-warning" role="alert">
-      <strong>주의</strong>: return문 사용 금지!!!
+      <strong>주의</strong>
+      <hr/>
+      tab은 4칸입니다.<br/>
+      return문 사용시 오류가 발생합니다.<br/>
+      성능 향상을 위해 print문은 자동으로 삭제됩니다.
     </div>
   </div>
 
   <form action="{{ url_for('func') }}" method="POST" class="post-form my-3">
-    <div class="form-floating">
-      <textarea name="content" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 300px">{{ data or '' }}</textarea>
-      <label for="floatingTextarea2">code</label>
+    <div class="form-group">
+      <label for="exampleFormControlTextarea1">코드 입력</label>
+      <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="10" placeholder="result = 0&#13;&#10;for a in A:&#13;&#10;    result += math.pow(a, random.randint(1, 10))"></textarea>
     </div>
     
     <div id="loading" style="display: none; margin-top: 16px;">

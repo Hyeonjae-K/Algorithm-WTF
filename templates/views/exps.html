@@ -13,9 +13,9 @@
   </div>
 
   <form action="{{ url_for('exps') }}" method="POST" class="post-form my-3">
-    <div class="form-floating">
-      <textarea name="content" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 300px">{{ data or '' }}</textarea>
-      <label for="floatingTextarea2">expressions</label>
+    <div class="form-group">
+      <label for="exampleFormControlTextarea1">수식 입력</label>
+      <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="10" placeholder="log(n)**2021&#13;&#10;sqrt(n)*log(n)&#13;&#10;4**(log(n))&#13;&#10;n**3+n**2*log(n)**4&#13;&#10;factorial(n/2)&#13;&#10;5**n"></textarea>
     </div>
     
     <div id="loading" style="display: none; margin-top: 16px;">
