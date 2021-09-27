@@ -28,3 +28,10 @@ def func():
         report = func_time_comp_cal(data)
         return render_template('views/func.html', report=report, data=data)
     return render_template('views/func.html', report=True)
+
+
+@app.route('/test', methods=['GET', 'POST'])
+def test():
+    if request.method == 'POST':
+        return {'method': 'POST'}
+    return 'test'
