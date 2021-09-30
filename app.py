@@ -1,7 +1,9 @@
-from flask import Flask, render_template, url_for, redirect, request
+import threading
+from random import getrandbits
+from flask import Flask, render_template, url_for, redirect, request, jsonify
 
-from expression_comparison_calculator import exps_comp_cal
-from function_time_complexity_calculator import func_time_comp_cal
+import global_var
+from calculators import exps_comp_cal, func_time_comp_cal
 
 app = Flask(__name__)
 
@@ -15,8 +17,11 @@ def index():
 def exps():
     if request.method == 'POST':
         data = request.form['content']
-        report = exps_comp_cal(data)
-        return render_template('views/exps.html', report=report, data=data)
+        hash = getrandbits(128)
+        global_var.exps_results[hash] = False
+        threading.Thread(target=exps_comp_cal, args=(data, hash))
+        print(jsonify(hash))
+        return jsonify(hash)
     return render_template('views/exps.html', report=True)
 
 

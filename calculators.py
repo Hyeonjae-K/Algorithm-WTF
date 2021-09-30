@@ -1,9 +1,13 @@
+import sys
+import math
+import random
+from bigO import BigO
 from sympy import Limit, S, Symbol, sympify, sqrt, log, factorial
 
 import global_var
 
 
-def exps_comp_cal(exps):
+def exps_comp_cal(exps, hash):
     n = Symbol('n')
     try:
         exps = [sympify(exp) for exp in exps.strip().split('\n')]
@@ -25,4 +29,16 @@ def exps_comp_cal(exps):
 
     report += ' < '.join(x[0] for x in sorted(results.items(),
                          key=(lambda x: x[1]), reverse=True))
-    return report
+    global_var.exps_results[hash] = report
+
+
+def func_time_comp_cal(code):
+    def f(A):
+        n = len(A)
+        exec(code)
+
+    try:
+        return BigO().test_all(f)
+    except:
+        print(sys.exc_info()[0])
+        return False

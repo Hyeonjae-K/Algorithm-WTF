@@ -79,7 +79,7 @@
   }
   function test() {
     console.log('test')
-    fetch("{{ url_for('test') }}").then((response) => console.log(response));
+    fetch("{{ url_for('exps') }}").then((hash) => console.log(hash.json()));
   }
 </script>
 {% endblock %}
