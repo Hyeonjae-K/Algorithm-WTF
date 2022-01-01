@@ -1,11 +1,11 @@
-import threading
-from random import getrandbits
 from flask import Flask, render_template, url_for, redirect, request, jsonify
+from threading import Thread
+import uuid
 
-import global_var
-from calculators import exps_comp_cal, func_time_comp_cal
+from calculators import compareExpressions, measureFunction
 
 app = Flask(__name__)
+g_results = {}
 
 
 @app.route('/')
@@ -17,26 +17,26 @@ def index():
 def exps():
     if request.method == 'POST':
         data = request.form['content']
-        hash = getrandbits(128)
-        global_var.exps_results[hash] = False
-        threading.Thread(target=exps_comp_cal, args=(data, hash))
-        print(jsonify(hash))
-        return jsonify(hash)
-    return render_template('views/exps.html', report=True)
+        key = uuid.uuid4().hex
+        g_results[key] = {'is_finish': False,
+                          'is_valid': False, 'result': None}
+        Thread(target=compareExpressions, args=(g_results, data, key)).start()
+        return jsonify(key)
+    return render_template('views/exps.html')
 
 
 @app.route('/func', methods=['GET', 'POST'])
 def func():
     if request.method == 'POST':
-        data = '\n'.join([x for x in request.form['content'].split(
-            '\n') if 'print(' not in x])
-        report = func_time_comp_cal(data)
-        return render_template('views/func.html', report=report, data=data)
-    return render_template('views/func.html', report=True)
+        data = request.form['content']
+        key = uuid.uuid4().hex
+        g_results[key] = {'is_finish': False,
+                          'is_valid': False, 'result': None}
+        Thread(target=measureFunction, args=(g_results, data, key)).start()
+        return jsonify(key)
+    return render_template('views/func.html')
 
 
-@app.route('/test', methods=['GET', 'POST'])
-def test():
-    if request.method == 'POST':
-        return {'method': 'POST'}
-    return 'test'
+@app.route('/results/<string:key>', methods=['GET'])
+def get_result(key):
+    return g_results[key]
